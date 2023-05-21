@@ -40,7 +40,6 @@ namespace Email_Cleaner
             _deletedEmails = 0;
             _summaryLabel = addSummaryLabel();
             updateSummaryLabel();
-            //this.Width = 1000;
         }
 
         public void SetFolders(List<Folder> folders)
@@ -58,15 +57,16 @@ namespace Email_Cleaner
                     folderInfo.UpdateLabels(folder);
                 }
             }
-            Width = 1000;
         }
 
         private void addFolderInfoUI(Folder folder)
         {
-            List<LabelInfo> labels = new List<LabelInfo>();
-            labels.Add(addFolderNameLabel(folder));
-            labels.Add(addFolderEmailCountLabel(folder));
-            labels.Add(addComparisonLabel(folder));
+            List<LabelInfo> labels = new List<LabelInfo>
+            {
+                addFolderNameLabel(folder),
+                addFolderEmailCountLabel(folder),
+                addComparisonLabel(folder)
+            };
             Button deleteButton = addDeleteButton(folder);
             FolderInfoUI folderInfo = new FolderInfoUI(folder.EntryID, labels, deleteButton);
             _folderInfos.Add(folderInfo);
@@ -85,7 +85,7 @@ namespace Email_Cleaner
             {
                 return (Label)Controls[name];
             }
-            return addLabel(name, "", xCoordinate, yCoordinate);
+            return addLabel(name, "", xCoordinate, yCoordinate, true, true);
         }
 
         /* lables */
@@ -114,7 +114,7 @@ namespace Email_Cleaner
         private LabelInfo addFolderNameLabel(Folder folder)
         {
             string name = folder.Name + "_" + folder.EntryID + "_name";
-            Label label = addLabel(name, folder.Name, xCoordinate, yCoordinate);
+            Label label = addLabel(name, folder.Name, xCoordinate, yCoordinate, true, true);
             return new LabelInfo(label);
         }
 
@@ -133,18 +133,27 @@ namespace Email_Cleaner
             return new LabelInfo(label);
         }
 
-        private Label addLabel(string name, string text, int x, int y, bool newLine = true)
+        private Label addLabel(string name, string text, int x, int y, bool newLine = true, bool bold = false)
         {
             Label label = new Label();
             label.AutoSize = true;
             label.Name = name;
             label.Text = text;
             label.Location = new Point(x, y);
+            if (bold)
+            {
+                label.Font = new Font(base.Font.FontFamily, 10, FontStyle.Bold);
+            }
+            else
+            {
+                label.Font = new Font(base.Font.FontFamily, 10);
+            }
             if (newLine)
             {
                 yCoordinate += 25;
             }
             this.Controls.Add(label);
+            
             return label;
         }
 
