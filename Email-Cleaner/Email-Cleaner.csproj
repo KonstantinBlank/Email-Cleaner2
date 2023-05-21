@@ -222,7 +222,7 @@
     <ManifestKeyFile>Email-Cleaner_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>309359F74760D960F6064573D596C5C4C41F842C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>94B705906B0506E66DB7A27CCEE55622DFECF377</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
