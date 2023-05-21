@@ -27,6 +27,7 @@ namespace Email_Cleaner
             _userControl_Outlook = new UserControl_Outlook();
             _taskPane = this.CustomTaskPanes.Add(_userControl_Outlook, "Email Cleaner");
             _taskPane.VisibleChanged += new EventHandler(taskPane_VisibleChanged);
+            _taskPane.Width = 350;
         }
 
         private void taskPane_VisibleChanged(object sender, System.EventArgs e)
