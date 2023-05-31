@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.Control;
 using Microsoft.Office.Interop.Outlook;
 
 namespace Email_Cleaner
@@ -31,8 +31,16 @@ namespace Email_Cleaner
             }
         }
 
-        public void Delete(ControlCollection controls)
+        public void Delete(TableLayoutPanel layout)
         {
+            TableLayoutControlCollection controls = layout.Controls;
+            // get the number of rows that are to be delted
+            // +1 because there is an empty row before
+            int removedRowCount = _labels.Count + 1;
+
+            // get the index of the first row after the rows that are to be deleted
+            int rowIndex = _labels[_labels.Count - 1].RowIndex + 1;
+
             foreach (LabelInfo label in _labels)
             {
                 controls.RemoveByKey(label.Label.Name);
@@ -41,20 +49,26 @@ namespace Email_Cleaner
 
             controls.RemoveByKey(_deleteButton.Name);
             _deleteButton = null;
-            
+
             _id = null;
-        }
 
-
-        internal int UpdatePosition(int x, int y)
-        {
-            foreach (LabelInfo label in _labels)
+            // remove the rows by shifting the rows below up and than remove the rows at the bottom
+            // Shift controls from rows below the removed row
+            for (int row = rowIndex; row < layout.RowCount; row++)
             {
-                label.SetLocation(x, y);
-                y += 25;
-            }            
-            y += 25;
-            return y;
+                for (int column = 0; column < layout.ColumnCount; column++)
+                {
+                    Control control = layout.GetControlFromPosition(column, row);
+                    if (control != null)
+                    {
+                        layout.SetRow(control, row - removedRowCount);
+                    }
+                }
+            }
+
+            // Remove the last row
+            layout.RowStyles.RemoveAt(layout.RowCount - removedRowCount);
+            layout.RowCount -= removedRowCount;
         }
     }
 }
